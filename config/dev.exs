@@ -49,8 +49,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :gibberChat, GibberChat.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "mpiwek",
+  password: "piwek",
   database: "gibberchat_dev",
   hostname: "localhost",
   pool_size: 10

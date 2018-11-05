@@ -2,7 +2,7 @@ defmodule GibberChat.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", GibberChat.RoomChannel
+  channel "room:*", GibberChat.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
@@ -19,8 +19,11 @@ defmodule GibberChat.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(%{"user" => user}, socket) do
+    {:ok, assign(socket, :user, user)}
+  end
+  def connect(_params, _socket) do
+    :error
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
@@ -33,5 +36,6 @@ defmodule GibberChat.UserSocket do
   #     GibberChat.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
+
   def id(_socket), do: nil
 end
