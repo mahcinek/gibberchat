@@ -4,6 +4,8 @@ defmodule GibberChat.User do
   schema "users" do
     field :nick, :string
     field :options, :string
+    field :admin, :boolean, default: false
+    field :access_token, :string
 
     timestamps()
   end
@@ -13,8 +15,8 @@ defmodule GibberChat.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:nick, :options])
-    |> validate_required([:nick, :options])
+    |> cast(params, [:nick, :options, :admin])
+    |> validate_required([:nick, :options, :admin])
     |> unique_constraint(:nick)
   end
 end

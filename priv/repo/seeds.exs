@@ -10,6 +10,8 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will halt execution if something goes wrong.
 
-random_nick = :crypto.strong_rand_bytes(10) |> Base.encode64 |>binary_part(0,length)
-random_token = :crypto.strong_rand_bytes(50) |> Base.encode64 |>binary_part(0,length)
-GibberChat.Repo.insert!(%GibberChat.User{nick:random_nick, admin:true, })
+ln = 10
+lt = 50
+random_nick = :crypto.strong_rand_bytes(ln) |> Base.encode64 |>binary_part(0,ln)
+random_token = :crypto.strong_rand_bytes(lt) |> Base.encode64 |>binary_part(0,lt)
+GibberChat.Repo.insert!(%GibberChat.User{nick: random_nick, admin: true, access_token: random_token})
