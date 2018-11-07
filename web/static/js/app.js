@@ -12,7 +12,10 @@
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
+import Chat from './chat'
 
+let chat = new Chat('room:lobby')
+chat.initialize()
 // Import local files
 //
 // Local files can be imported directly using relative
