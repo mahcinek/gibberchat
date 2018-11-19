@@ -12,6 +12,35 @@ defmodule GibberChat.RoomController do
                      "auth_on" => auth_on,
                      "options" => opts,
                      "access_token" => ac_token}) do
+    adm = auth_adm(conn,auth_token)
+    handle_tags(tags)
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), access_token: ac_token, options: opts})
+    json(conn, room_response(room))
+  end
+  def create(conn, %{"auth_token" => auth_token,
+                     "tags" => tags,
+                     "save_on" => save_on,
+                     "auth_on" => auth_on,
+                     "options" => opts}) do
+    adm = auth_adm(conn,auth_token)
+    auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
+    token = token_check(auth_on)
+    handle_tags(tags)
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts})
+    json(conn, room_response(room))
+  end
+
+  def create(conn, %{"auth_token" => auth_token,
+                     "save_on" => save_on,
+                     "auth_on" => auth_on,
+                     "options" => opts,
+                     "tags" => tags}) do
+    adm = auth_adm(conn,auth_token)
+    auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
+    token = token_check(auth_on)
+    handle_tags(tags)
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts})
+    json(conn, room_response(room))
   end
 
   def create(conn, %{"auth_token" => auth_token,
@@ -20,22 +49,21 @@ defmodule GibberChat.RoomController do
                      "options" => opts}) do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
-    token = if auth_on do
-      IO.puts "Gen token"
-      gen_access_token()
-    else
-      nil
-    end
+    token = token_check(auth_on)
     room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts})
-    response = %{id: room.id,
-                 title: room.title,
-                 save_on: room.save_on,
-                 auth_on: room.auth_on,
-                 inserted_at: room.inserted_at,
-                 options: room.options,
-                 access_token: room.access_token
-                }
-    json(conn, response)
+    json(conn, room_response(room))
+  end
+
+  def create(conn, %{"auth_token" => auth_token,
+                     "save_on" => save_on,
+                     "auth_on" => auth_on,
+                     "tags" => tags}) do
+    adm = auth_adm(conn,auth_token)
+    auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
+    token = token_check(auth_on)
+    handle_tags(tags)
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token})
+    json(conn, room_response(room))
   end
 
   def create(conn, %{"auth_token" => auth_token,
@@ -43,22 +71,9 @@ defmodule GibberChat.RoomController do
                      "auth_on" => auth_on}) do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
-    token = if auth_on do
-      IO.puts "Gen token"
-      gen_access_token()
-    else
-      nil
-    end
+    token = token_check(auth_on)
     room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token})
-    response = %{id: room.id,
-                 title: room.title,
-                 save_on: room.save_on,
-                 auth_on: room.auth_on,
-                 inserted_at: room.inserted_at,
-                 options: room.options,
-                 access_token: room.access_token
-                }
-    json(conn, response)
+    json(conn, room_response(room))
   end
   
   
@@ -92,7 +107,26 @@ defmodule GibberChat.RoomController do
     end
   end
 
+  def room_response(room) do
+    %{id: room.id,
+        title: room.title,
+        save_on: room.save_on,
+        auth_on: room.auth_on,
+        inserted_at: room.inserted_at,
+        options: room.options,
+        access_token: room.access_token
+      }
+  end
   
+  def token_check(auth_on) do
+    if auth_on do
+      IO.puts "Gen token"
+      gen_access_token()
+    else
+      nil
+    end
+  end
+
   def not_found(conn) do
     conn
     |> put_status(:not_found)
