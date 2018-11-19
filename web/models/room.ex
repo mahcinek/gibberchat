@@ -21,4 +21,13 @@ defmodule GibberChat.Room do
     |> validate_required([:title, :access_token, :open, :save_on, :auth_on, :options])
     |> unique_constraint(:access_token)
   end
+
+  def open_rooms() do
+    query = from r in GibberChat.Room, where: r.open == true
+    GibberChat.Repo.all(query)
+  end
+  def find_room(token) do
+    query = from r in GibberChat.Room, where: r.access_token == ^token
+    GibberChat.Repo.all(query)
+  end
 end

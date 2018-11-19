@@ -19,4 +19,18 @@ defmodule GibberChat.User do
     |> validate_required([:nick, :options, :admin])
     |> unique_constraint(:nick)
   end
+
+  def auth_admin(adm_token) do
+    query = from u in GibberChat.User, where: u.access_token == ^adm_token and u.admin == true
+    res = GibberChat.Repo.all(query)
+    s = "none"
+    # if res.empty? do 
+    #   s = "none" 
+    # else
+    #    s = "ok"
+    # end
+    %{status: s, res: res}
+  end
+  def auth_user(user_token) do
+  end
 end

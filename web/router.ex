@@ -18,9 +18,11 @@ defmodule GibberChat.Router do
 
     get "/", PageController, :index
   end
-
+  
   # Other scopes may use custom stacks.
-  # scope "/api", GibberChat do
-  #   pipe_through :api
-  # end
+  scope "/api", GibberChat do
+    pipe_through :api
+    get "/rooms", RoomController, :index
+    post "/room", RoomController, :create
+  end
 end
