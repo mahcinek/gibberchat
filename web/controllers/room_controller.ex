@@ -95,7 +95,7 @@ defmodule GibberChat.RoomController do
     room = find_room(conn, id)
     handle_tags(room, tags)
     changeset = Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, access_token: ac_token, title: title})
-    Repo.update(changeset)
+    GibberChat.Repo.update(changeset)
   end
 
   def update(conn, %{"auth_token" => auth_token,
@@ -109,12 +109,13 @@ defmodule GibberChat.RoomController do
     room = find_room(conn, id)
     handle_tags(room, tags)
     changeset = Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, title: title})
-    Repo.update(changeset)
+    GibberChat.Repo.update(changeset)
   end
     
   def delete(conn, %{"auth_token" => auth_token, "id" => id}) do
     adm = auth_adm(conn, auth_token)
     room = find_room(conn, id)
+    GibberChat.Repo.delete(room)
   end
 
   def handle_tags(room, tag_list) do
