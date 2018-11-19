@@ -24,12 +24,14 @@ defmodule GibberChat.User do
     query = from u in GibberChat.User, where: u.access_token == ^adm_token and u.admin == true
     res = GibberChat.Repo.all(query)
     s = "none"
-    # if res.empty? do 
-    #   s = "none" 
-    # else
-    #    s = "ok"
-    # end
-    %{status: s, res: res}
+    IO.puts "is empty"
+    IO.inspect Enum.empty?(res)
+    unless Enum.empty?(res) do 
+      IO.puts "OK"
+      %{status: "ok", res: res}
+    else
+      %{status: "none", res: res}
+    end
   end
   def auth_user(user_token) do
   end
