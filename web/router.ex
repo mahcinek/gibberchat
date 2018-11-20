@@ -29,6 +29,8 @@ defmodule GibberChat.Router do
     get "/tags", TagController, :index
     post "/tag", TagController, :create
     put "/tag", TagController, :update
+    post "/add_to_user", TagController, :add_to_user
+    post "/add_to_room", TagController, :add_to_room
     delete "/tag", TagController, :delete
     get "/messages", MessageController, :index
     put "/message", MessageController, :update

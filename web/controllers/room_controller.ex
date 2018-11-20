@@ -140,7 +140,8 @@ defmodule GibberChat.RoomController do
         inserted_at: room.inserted_at,
         options: room.options,
         access_token: room.access_token,
-        open: room.open
+        open: room.open,
+        tags: tag_resp(room.tags)
       }
   end
   def room_public_response(room) do
@@ -150,10 +151,22 @@ defmodule GibberChat.RoomController do
         auth_on: room.auth_on,
         inserted_at: room.inserted_at,
         options: room.options,
-        open: room.open
+        open: room.open,
+        tags: tag_resp(room.tags)
       }
   end
   
+  def tag_resp(tags) do
+    Enum.map(tags, fn elem -> tag_response(elem) end)
+  end
+
+  def tag_response(tag) do
+    %{
+      id: tag.id,
+      label: tag.label
+      }
+  end
+
   def token_check(auth_on) do
     if auth_on do
       IO.puts "Gen token"

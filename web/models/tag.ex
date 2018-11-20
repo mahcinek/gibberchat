@@ -3,7 +3,8 @@ defmodule GibberChat.Tag do
 
   schema "tags" do
     field :label, :string
-
+    has_many :room_tags, GibberChat.RoomTag
+    has_many :rooms, through: [:room_tags, :room]
     timestamps()
   end
 

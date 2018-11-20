@@ -8,7 +8,8 @@ defmodule GibberChat.Room do
     field :save_on, :boolean, default: false
     field :auth_on, :boolean, default: false
     field :options, :string
-
+    has_many :room_tags, GibberChat.RoomTag
+    has_many :tags, through: [:room_tags, :tag]
     timestamps()
   end
 
@@ -23,11 +24,11 @@ defmodule GibberChat.Room do
   end
 
   def open_rooms() do
-    query = from r in GibberChat.Room, where: r.open == true
+    query = from r in GibberChat.Room, where: r.open == true, preload: [:tags]
     GibberChat.Repo.all(query)
   end
   def all_rooms() do
-    query = from r in GibberChat.Room
+    query = from r in GibberChat.Room, preload: [:tags]
     GibberChat.Repo.all(query)
   end
   def find_room(token) do
