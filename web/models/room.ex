@@ -26,6 +26,10 @@ defmodule GibberChat.Room do
     query = from r in GibberChat.Room, where: r.open == true
     GibberChat.Repo.all(query)
   end
+  def all_rooms() do
+    query = from r in GibberChat.Room
+    GibberChat.Repo.all(query)
+  end
   def find_room(token) do
     query = from r in GibberChat.Room, where: r.access_token == ^token
     GibberChat.Repo.all(query)

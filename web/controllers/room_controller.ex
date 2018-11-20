@@ -2,10 +2,15 @@ defmodule GibberChat.RoomController do
   use GibberChat.Web, :controller
   require IEx
 
+  def index(conn, %{"auth_token" => auth_token}) do
+    adm = auth_adm(conn,auth_token)
+    a = GibberChat.Room.all_rooms()
+    IO.inspect a
+    json(conn, Enum.map(a, fn elem -> room_response(elem) end))
+  end
   def index(conn, _params) do
     a = GibberChat.Room.open_rooms()
     IO.inspect a
-    response = %{rooms: "GibberChat.Room.open_rooms()"}
     json(conn, Enum.map(a, fn elem -> room_response(elem) end))
   end
 
