@@ -22,6 +22,10 @@ defmodule GibberChat.Router do
   # Other scopes may use custom stacks.
   scope "/api", GibberChat do
     pipe_through :api
+    post "/user", UserController, :create
+    delete "/user", UserController, :delete
+    post "/blockage", BlockageController, :create
+    delete "/blockage", BlockageController, :delete
     get "/tags", TagController, :index
     post "/tag", TagController, :create
     put "/tag", TagController, :update
@@ -30,6 +34,9 @@ defmodule GibberChat.Router do
     put "/message", MessageController, :update
     delete "/message", MessageController, :delete
     get "/rooms", RoomController, :index
+    post "/join_room", RoomController, :join_room
+    post "/leave", RoomController, :join_room
+    get "/search", RoomController, :search
     post "/room", RoomController, :create
     put "/room", RoomController, :update
     delete "/room", RoomController, :delete

@@ -127,15 +127,7 @@ defmodule GibberChat.RoomController do
   end
 
   def auth_adm(conn,token) do
-    resp = GibberChat.User.auth_admin(token)
-    IO.inspect resp
-    %{res: r, status: s} = resp
-    if s == "none" do
-      IO.puts "UA"
-      unauthorized(conn)
-    else
-      r
-    end
+    GibberChat.User.auth_adm_helper(conn,token)
   end
 
   def room_response(room) do

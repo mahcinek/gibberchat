@@ -20,6 +20,18 @@ defmodule GibberChat.User do
     |> unique_constraint(:nick)
   end
 
+  def auth_adm_helper(conn,token) do
+    resp = auth_admin(token)
+    IO.inspect resp
+    %{res: r, status: s} = resp
+    if s == "none" do
+      IO.puts "UA"
+      unauthorized(conn)
+    else
+      r
+    end
+  end
+
   def auth_admin(adm_token) do
     query = from u in GibberChat.User, where: u.access_token == ^adm_token and u.admin == true
     res = GibberChat.Repo.all(query)
