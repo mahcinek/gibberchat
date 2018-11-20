@@ -8,10 +8,11 @@ defmodule GibberChat.RoomController do
     IO.inspect a
     json(conn, Enum.map(a, fn elem -> room_response(elem) end))
   end
+
   def index(conn, _params) do
     a = GibberChat.Room.open_rooms()
     IO.inspect a
-    json(conn, Enum.map(a, fn elem -> room_response(elem) end))
+    json(conn, Enum.map(a, fn elem -> room_public_response(elem) end))
   end
 
   def show(conn, %{"id" => id}) do
@@ -138,6 +139,16 @@ defmodule GibberChat.RoomController do
         open: room.open
       }
   end
+  def room_public_response(room) do
+    %{id: room.id,
+        title: room.title,
+        save_on: room.save_on,
+        auth_on: room.auth_on,
+        inserted_at: room.inserted_at,
+        options: room.options,
+        open: room.open
+      }
+  end
   
   def token_check(auth_on) do
     if auth_on do
@@ -153,15 +164,10 @@ defmodule GibberChat.RoomController do
     unless room == nil do 
       room
     else
-      not_found(conn)
+      GibberChat.ApiController.not_found(conn)
     end
   end
 
-  def not_found(conn) do
-    conn
-    |> put_status(:not_found)
-    |> json(%{status: "not found"})
-  end
   def unauthorized(conn) do
     conn
     |> put_status(:unauthorized)

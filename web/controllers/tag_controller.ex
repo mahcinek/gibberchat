@@ -13,13 +13,24 @@ defmodule GibberChat.TagController do
   end
 
   def add_to_user do
+    adm = auth_adm(conn,auth_token)
+    user = find_user(room_id)
+    tag = find_tag(tag_id)
+    user_tag = GibberChat.Repo.insert(%GibberChat.RoomTag{room_id: room.id, tag_id: tag.id})
+    u_tag = GibberChat.ApiController.check_insert(conn, room_tag)
+    GibberChat.ApiController.created(conn)
   end
 
   def add_to_room(conn, %{"auth_token" => auth_token,
-                     "room_id" => room,
-                     "tag_id" => tag
+                     "room_id" => room_id,
+                     "tag_id" => tag_id
                      }) do
-
+    adm = auth_adm(conn,auth_token)
+    room = find_room(room_id)
+    tag = find_tag(tag_id)
+    room_tag = GibberChat.Repo.insert(%GibberChat.RoomTag{room_id: room.id, tag_id: tag.id})
+    r_tag = GibberChat.ApiController.check_insert(conn, room_tag)
+    GibberChat.ApiController.created(conn)
   end
 
   def tag_response(tag) do
@@ -36,11 +47,37 @@ defmodule GibberChat.TagController do
   end
 
   def find_tag(conn, id) do
-    room = GibberChat.Tag.find_tag_id(id)
+    tag = GibberChat.Tag.find_tag_id(id)
+    unless tag == nil do 
+      tag
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+  def find_room(conn, id) do
+    room = GibberChat.Room.find_room_id(id)
     unless room == nil do 
       room
     else
-      GibberChat.ApiController.not_found(conn)
+      GibberChat.ApiController.not_found_message(conn, "room")
+    end
+  end
+  def find_user(conn, id) do
+    room = GibberChat.Room.find_user_id(id)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found_message(conn, "user")
+    end
+  end
+
+  def find_tag(conn, id) do
+    tag = GibberChat.Tag.find_tag_id(id)
+    unless tag == nil do 
+      tag
+    else
+      GibberChat.ApiController.not_found_message(conn, "tag")
     end
   end
 end
