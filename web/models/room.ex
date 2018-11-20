@@ -32,6 +32,6 @@ defmodule GibberChat.Room do
   end
   def find_room_id(id) do
     query = from r in GibberChat.Room, where: r.id == ^id
-    GibberChat.Repo.all(query)
+    GibberChat.Repo.one(query)
   end
 end

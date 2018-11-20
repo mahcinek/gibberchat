@@ -37,20 +37,6 @@ defmodule GibberChat.RoomController do
                      "save_on" => save_on,
                      "auth_on" => auth_on,
                      "options" => opts,
-                     "tags" => tags,
-                     "title" => title}) do
-    adm = auth_adm(conn,auth_token)
-    auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
-    token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts})
-    handle_tags(room, tags)
-    json(conn, room_response(room))
-  end
-
-  def create(conn, %{"auth_token" => auth_token,
-                     "save_on" => save_on,
-                     "auth_on" => auth_on,
-                     "options" => opts,
                      "title" => title}) do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
@@ -79,7 +65,7 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, titile: title})
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, title: title})
     json(conn, room_response(room))
   end
   
@@ -94,7 +80,7 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     room = find_room(conn, id)
     handle_tags(room, tags)
-    changeset = Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, access_token: ac_token, title: title})
+    changeset = GibberChat.Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, access_token: ac_token, title: title})
     GibberChat.Repo.update(changeset)
   end
 
@@ -108,14 +94,17 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     room = find_room(conn, id)
     handle_tags(room, tags)
-    changeset = Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, title: title})
+    changeset = GibberChat.Room.changeset(room, %{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), options: opts, title: title})
     GibberChat.Repo.update(changeset)
   end
     
   def delete(conn, %{"auth_token" => auth_token, "id" => id}) do
     adm = auth_adm(conn, auth_token)
     room = find_room(conn, id)
-    GibberChat.Repo.delete(room)
+    IO.inspect room
+    IEx.Info.info(room)
+    GibberChat.Repo.delete!(room)
+    json(conn, %{status: "deleted"})
   end
 
   def handle_tags(room, tag_list) do
@@ -161,7 +150,7 @@ defmodule GibberChat.RoomController do
 
   def find_room(conn, id) do
     room = GibberChat.Room.find_room_id(id)
-    unless Enum.empty?(room) do 
+    unless room == nil do 
       room
     else
       not_found(conn)

@@ -24,5 +24,7 @@ defmodule GibberChat.Router do
     pipe_through :api
     get "/rooms", RoomController, :index
     post "/room", RoomController, :create
+    put "/room", RoomController, :update
+    delete "/room", RoomController, :delete
   end
 end
