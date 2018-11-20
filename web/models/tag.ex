@@ -15,4 +15,9 @@ defmodule GibberChat.Tag do
     |> cast(params, [:label])
     |> validate_required([:label])
   end
+
+  def find_tag_id(id) do
+    query = from r in GibberChat.Tag, where: r.id == ^id
+    GibberChat.Repo.one(query)
+  end
 end

@@ -9,7 +9,7 @@ defmodule GibberChat.BlockageController do
                      "user_id" => user
                      }) do
     adm = auth_adm(conn,auth_token)
-    room = GibberChat.Repo.insert!(%GibberChat.Blocage{room_id: room, user_id: user})
+    room = GibberChat.Repo.insert!(%GibberChat.Blockage{room_id: room, user_id: user})
     json(conn, blockage_response(room))
   end
 
@@ -25,5 +25,14 @@ defmodule GibberChat.BlockageController do
         body: message.body,
         options: message.options
       }
+  end
+
+    def find_blockage(conn, id) do
+    room = GibberChat.Blockage.find_blockage_id(id)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
   end
 end

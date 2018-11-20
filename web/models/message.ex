@@ -17,4 +17,9 @@ defmodule GibberChat.Message do
     |> cast(params, [:body, :options])
     |> validate_required([:body, :options])
   end
+
+  def find_message_id(id) do
+    query = from r in GibberChat.Message, where: r.id == ^id
+    GibberChat.Repo.one(query)
+  end
 end

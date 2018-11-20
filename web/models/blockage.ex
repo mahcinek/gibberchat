@@ -16,4 +16,9 @@ defmodule GibberChat.Blockage do
     |> cast(params, [])
     |> validate_required([])
   end
+
+    def find_blockage_id(id) do
+    query = from r in GibberChat.Blockage, where: r.id == ^id
+    GibberChat.Repo.one(query)
+  end
 end

@@ -26,7 +26,7 @@ defmodule GibberChat.User do
     %{res: r, status: s} = resp
     if s == "none" do
       IO.puts "UA"
-      unauthorized(conn)
+      GibberChat.RoomController.unauthorized(conn)
     else
       r
     end
@@ -46,5 +46,10 @@ defmodule GibberChat.User do
     end
   end
   def auth_user(user_token) do
+  end
+
+  def find_user_id(id) do
+    query = from r in GibberChat.User, where: r.id == ^id
+    GibberChat.Repo.one(query)
   end
 end

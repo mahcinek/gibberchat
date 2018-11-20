@@ -6,11 +6,12 @@ defmodule GibberChat.MessageController do
   
   def update(conn, %{"auth_token" => auth_token,
                      "body" => body,
-                     "options" => opts
+                     "options" => opts,
+                     "id" => id
                      }) do
     adm = auth_adm(conn,auth_token)
     message = find_message(conn, id)
-    changeset = GibberChat.Message.changeset(message, %{{body: body, options: opts})
+    changeset = GibberChat.Message.changeset(message, %{body: body, options: opts})
     r = GibberChat.Repo.update(changeset)
     json(conn, message_response(elem(r,1)))
   end
@@ -28,4 +29,14 @@ defmodule GibberChat.MessageController do
         options: message.options
       }
   end
+
+  def find_message(conn, id) do
+    room = GibberChat.Message.find_message_id(id)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
+  end
+
 end

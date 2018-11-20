@@ -5,18 +5,34 @@ defmodule GibberChat.UserController do
   end
 
   def create(conn, %{"auth_token" => auth_token,
-                     "room_id" => room,
-                     "user_id" => user
+                     "nick" => nick,
+                     "options" => opts
                      }) do
     adm = auth_adm(conn,auth_token)
-    room = GibberChat.Repo.insert!(%GibberChat.Blocage{room_id: room, user_id: user})
-    json(conn, blockage_response(room))
+    user = GibberChat.Repo.insert!(%GibberChat.User{nick: nick, options: opts})
+    json(conn, user_response(user))
   end
 
   def delete(conn, %{"auth_token" => auth_token, "id" => id}) do
     adm = auth_adm(conn, auth_token)
-    message = find_blockage(conn, id)
+    message = find_user(conn, id)
     GibberChat.Repo.delete!(message)
     json(conn, %{status: "deleted"})
+  end
+
+  def find_user(conn, id) do
+    room = GibberChat.User.find_user_id(id)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+  def user_response(user) do
+      %{id: user.id,
+        nick: user.nick,
+        options: user.options
+      }
   end
 end
