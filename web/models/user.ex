@@ -6,7 +6,8 @@ defmodule GibberChat.User do
     field :options, :string
     field :admin, :boolean, default: false
     field :access_token, :string
-
+    has_many :user_tags, GibberChat.UserTag
+    has_many :tags, through: [:user_tags, :tag]
     timestamps()
   end
 

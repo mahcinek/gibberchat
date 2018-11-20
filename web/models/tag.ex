@@ -5,6 +5,8 @@ defmodule GibberChat.Tag do
     field :label, :string
     has_many :room_tags, GibberChat.RoomTag
     has_many :rooms, through: [:room_tags, :room]
+    has_many :room_users, GibberChat.RoomUser
+    has_many :users, through: [:room_users, :user]
     timestamps()
   end
 
