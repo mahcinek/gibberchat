@@ -18,7 +18,7 @@ defmodule GibberChat.Room do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:title, :access_token, :open, :save_on, :auth_on, :options])
-    |> validate_required([:title, :access_token, :open, :save_on, :auth_on, :options])
+    |> validate_required([:title, :save_on, :auth_on])
     |> unique_constraint(:access_token)
   end
 
