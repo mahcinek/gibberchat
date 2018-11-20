@@ -3,4 +3,27 @@ defmodule GibberChat.BlockageController do
   def auth_adm(conn,token) do
     GibberChat.User.auth_adm_helper(conn,token)
   end
+
+  def create(conn, %{"auth_token" => auth_token,
+                     "room_id" => room,
+                     "user_id" => user
+                     }) do
+    adm = auth_adm(conn,auth_token)
+    room = GibberChat.Repo.insert!(%GibberChat.Blocage{room_id: room, user_id: user})
+    json(conn, blockage_response(room))
+  end
+
+  def delete(conn, %{"auth_token" => auth_token, "id" => id}) do
+    adm = auth_adm(conn, auth_token)
+    message = find_blockage(conn, id)
+    GibberChat.Repo.delete!(message)
+    json(conn, %{status: "deleted"})
+  end
+
+  def blockage_response(message) do
+      %{id: message.id,
+        body: message.body,
+        options: message.options
+      }
+  end
 end
