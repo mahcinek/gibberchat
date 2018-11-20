@@ -1,4 +1,4 @@
-defmodule GibberChat.TagController do
+defmodule GibberChat.UserController do
   use GibberChat.Web, :controller
   
 end

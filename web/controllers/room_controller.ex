@@ -1,5 +1,6 @@
 defmodule GibberChat.RoomController do
   use GibberChat.Web, :controller
+  require IEx
 
   def index(conn, _params) do
     response = %{rooms: GibberChat.Room.open_rooms()}
@@ -70,7 +71,7 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, title: title, open: elem(Ecto.Type.cast(:boolean,open),1)i})
+    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, title: title, open: elem(Ecto.Type.cast(:boolean,open),1)})
     json(conn, room_response(room))
   end
   
@@ -117,7 +118,7 @@ defmodule GibberChat.RoomController do
   end
 
   def handle_tags(room, tag_list) do
-
+    IEx.pry
   end
 
   def gen_access_token() do
