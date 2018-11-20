@@ -4,7 +4,7 @@ defmodule GibberChat.Room do
   schema "rooms" do
     field :title, :string
     field :access_token, :string
-    field :open, :boolean, default: false
+    field :open, :boolean, default: true
     field :save_on, :boolean, default: false
     field :auth_on, :boolean, default: false
     field :options, :string

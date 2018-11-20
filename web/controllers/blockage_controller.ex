@@ -9,7 +9,8 @@ defmodule GibberChat.BlockageController do
                      "user_id" => user
                      }) do
     adm = auth_adm(conn,auth_token)
-    room = GibberChat.Repo.insert!(%GibberChat.Blockage{room_id: room, user_id: user})
+    room = GibberChat.Repo.insert(%GibberChat.Blockage{room_id: room, user_id: user})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, blockage_response(room))
   end
 

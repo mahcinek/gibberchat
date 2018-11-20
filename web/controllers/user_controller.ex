@@ -9,7 +9,8 @@ defmodule GibberChat.UserController do
                      "options" => opts
                      }) do
     adm = auth_adm(conn,auth_token)
-    user = GibberChat.Repo.insert!(%GibberChat.User{nick: nick, options: opts})
+    user = GibberChat.Repo.insert(%GibberChat.User{nick: nick, options: opts})
+    user = GibberChat.ApiController.check_insert(conn, user)
     json(conn, user_response(user))
   end
 

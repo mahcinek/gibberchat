@@ -8,16 +8,20 @@ defmodule GibberChat.TagController do
                      "label" => label
                      }) do
     adm = auth_adm(conn,auth_token)
-    tag = GibberChat.Repo.insert!(%GibberChat.Tag{label: label})
+    tag = GibberChat.Repo.insert(%GibberChat.Tag{label: label})
+    tag = GibberChat.ApiController.check_insert(conn, tag)
     json(conn, tag_response(tag))
   end
 
-  def add_to_user do
+  def add_to_user(conn,%{"auth_token" => auth_token,
+                     "user_id" => user_id,
+                     "tag_id" => tag_id
+                     }) do
     adm = auth_adm(conn,auth_token)
-    user = find_user(room_id)
-    tag = find_tag(tag_id)
-    user_tag = GibberChat.Repo.insert(%GibberChat.RoomTag{room_id: room.id, tag_id: tag.id})
-    u_tag = GibberChat.ApiController.check_insert(conn, room_tag)
+    user = find_user(conn, user_id)
+    tag = find_tag(conn, tag_id)
+    user_tag = GibberChat.Repo.insert(%GibberChat.RoomTag{room_id: user.id, tag_id: tag.id})
+    u_tag = GibberChat.ApiController.check_insert(conn, user_tag)
     GibberChat.ApiController.created(conn)
   end
 
@@ -26,8 +30,8 @@ defmodule GibberChat.TagController do
                      "tag_id" => tag_id
                      }) do
     adm = auth_adm(conn,auth_token)
-    room = find_room(room_id)
-    tag = find_tag(tag_id)
+    room = find_room(conn,room_id)
+    tag = find_tag(conn, tag_id)
     room_tag = GibberChat.Repo.insert(%GibberChat.RoomTag{room_id: room.id, tag_id: tag.id})
     r_tag = GibberChat.ApiController.check_insert(conn, room_tag)
     GibberChat.ApiController.created(conn)
@@ -64,7 +68,7 @@ defmodule GibberChat.TagController do
     end
   end
   def find_user(conn, id) do
-    room = GibberChat.Room.find_user_id(id)
+    room = GibberChat.User.find_user_id(id)
     unless room == nil do 
       room
     else

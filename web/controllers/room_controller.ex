@@ -27,7 +27,8 @@ defmodule GibberChat.RoomController do
                      "title" => title,
                      "open" => open}) do
     adm = auth_adm(conn,auth_token)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), access_token: ac_token, options: opts})
+    room = GibberChat.Repo.insert(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: elem(Ecto.Type.cast(:boolean,auth_on),1), access_token: ac_token, options: opts})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
 
@@ -40,7 +41,8 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.Repo.insert(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
 
@@ -53,7 +55,8 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.Repo.insert(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, options: opts, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
 
@@ -65,19 +68,20 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.Repo.insert(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
 
   def create(conn, %{"auth_token" => auth_token,
                      "save_on" => save_on,
                      "auth_on" => auth_on,
-                     "title" => title,
-                     "open" => open}) do
+                     "title" => title}) do
     adm = auth_adm(conn,auth_token)
     auth_on = elem(Ecto.Type.cast(:boolean,auth_on),1)
     token = token_check(auth_on)
-    room = GibberChat.Repo.insert!(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, title: title, open: elem(Ecto.Type.cast(:boolean,open),1)})
+    room = GibberChat.Repo.insert(%GibberChat.Room{save_on: elem(Ecto.Type.cast(:boolean,save_on),1), auth_on: auth_on, access_token: token, title: title})
+    room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
   
