@@ -9,6 +9,7 @@ defmodule GibberChat.Room do
     field :auth_on, :boolean, default: false
     field :options, :string
     has_many :room_tags, GibberChat.RoomTag
+    has_many :messages, GibberChat.Message
     has_many :tags, through: [:room_tags, :tag]
     timestamps()
   end

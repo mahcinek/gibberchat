@@ -38,12 +38,12 @@ defmodule GibberChat.ChatSocket do
   #
   # Returning `nil` makes this socket anonymous.
 
-  def id(socket), do: "users_socket:#{socket.assigns.user_token}"
+  def id(socket), do: "chat_socket:#{socket.assigns.user_token}"
 
   def check_token(socket,token) do
     us = GibberChat.User.find_user(token)
     if us == nil do
-      {:error, %{reason: "unauthorized"}}
+      :error
     else
       {:ok, assign(socket, :user_token, token)}
     end

@@ -3,6 +3,19 @@ defmodule GibberChat.MessageController do
   def auth_adm(conn,token) do
     GibberChat.User.auth_adm_helper(conn,token)
   end
+
+  def room_messages(conn, %{"room_token" => r_token,
+                            "user_token" => u_token})do
+    room = find_room(conn, r_token)
+    user = find_user(conn, u_token)
+    json(conn, messages_response(room.messages))
+  end
+
+  def room_messages(conn, %{"room_token" => r_token,
+                            "user_token" => u_token,
+                            "auth_token" => u_auth_token})do
+    
+  end
   
   def update(conn, %{"auth_token" => auth_token,
                      "body" => body,
