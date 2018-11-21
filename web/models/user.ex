@@ -19,8 +19,8 @@ defmodule GibberChat.User do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:nick, :options, :admin])
-    |> validate_required([:nick, :options, :admin])
-    |> unique_constraint(:nick)
+    |> validate_required([:nick, :admin])
+    |> unique_constraint(:nick, name: :users_nick_index)
   end
 
   def auth_adm_helper(conn,token) do
@@ -49,6 +49,11 @@ defmodule GibberChat.User do
     end
   end
   def auth_user(user_token) do
+  end
+
+  def find_user_with_tokens(id) do
+    query = from r in GibberChat.User, where: r.id == ^id, preload: [room_users: :rooms], preload: [:tags]
+    GibberChat.Repo.one(query)
   end
 
   def find_user_id(id) do

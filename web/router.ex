@@ -24,6 +24,7 @@ defmodule GibberChat.Router do
     pipe_through :api
     post "/user", UserController, :create
     delete "/user", UserController, :delete
+    get "/user", UserController, :show
     post "/blockage", BlockageController, :create
     delete "/blockage", BlockageController, :delete
     get "/tags", TagController, :index

@@ -15,7 +15,7 @@ defmodule GibberChat.Message do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:body, :options])
-    |> validate_required([:body, :options])
+    |> validate_required([:body])
   end
 
   def find_message_id(id) do
