@@ -9,7 +9,8 @@ defmodule GibberChat.UserController do
                      "options" => opts
                      }) do
     adm = auth_adm(conn,auth_token)
-    user = GibberChat.Repo.insert(%GibberChat.User{nick: nick, options: opts})
+    token = gen_access_token(90)
+    user = GibberChat.Repo.insert(%GibberChat.User{nick: nick, options: opts, access_token: token})
     user = GibberChat.ApiController.check_insert(conn, user)
     json(conn, user_response(user))
   end
@@ -35,5 +36,9 @@ defmodule GibberChat.UserController do
         nick: user.nick,
         options: user.options
       }
+  end
+
+  def gen_access_token(lt) do
+    random_token = :crypto.strong_rand_bytes(lt) |> Base.encode64 |>binary_part(0,lt)
   end
 end

@@ -8,6 +8,8 @@ defmodule GibberChat.User do
     field :access_token, :string
     has_many :user_tags, GibberChat.UserTag
     has_many :tags, through: [:user_tags, :tag]
+    has_many :room_users, GibberChat.RoomUser
+    has_many :rooms, through: [:room_users, :room]
     timestamps()
   end
 

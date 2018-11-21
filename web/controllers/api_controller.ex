@@ -30,6 +30,10 @@
     |> put_status(:created)
     |> json(%{status: "Created"})
   end
+  def add_created(conn) do
+    conn
+    |> put_status(:created)
+  end
   def forbidden(conn) do
     conn
     |> put_status(:forbidden)
