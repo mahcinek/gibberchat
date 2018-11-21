@@ -126,6 +126,7 @@ defmodule GibberChat.RoomController do
   def join_room(conn, %{"admin_auth_token" => auth_token, "room_access_token" => acc_token, "user_id" => us_id}) do
     adm = auth_adm(conn, auth_token)
     room = find_room_token(conn, acc_token)
+    us_id = elem(Ecto.Type.cast(:integer,us_id),1)
     r_u = if room.auth_on do
       r_u = GibberChat.Repo.insert(%GibberChat.RoomUser{user_id: us_id, room_id: room.id, auth_token: gen_access_token()})
        GibberChat.ApiController.check_insert(conn, r_u)
@@ -186,7 +187,7 @@ defmodule GibberChat.RoomController do
   def room_user(room_user) do
     %{
       id: room_user.id,
-      access: room_user.auth_token
+      access_token: room_user.auth_token
       }
   end
   

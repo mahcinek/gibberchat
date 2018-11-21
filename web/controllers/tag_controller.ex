@@ -4,6 +4,21 @@ defmodule GibberChat.TagController do
     GibberChat.User.auth_adm_helper(conn,token)
   end
 
+  def index(conn, %{"auth_token" => auth_token}) do
+    adm = auth_adm(conn,auth_token)
+    tags = GibberChat.Tag.all_tags
+    json(conn, tags_response(tags))
+  end
+
+  def create(conn, %{"auth_token" => auth_token,
+                     "label" => label
+                     }) do
+    adm = auth_adm(conn,auth_token)
+    tag = GibberChat.Repo.insert(%GibberChat.Tag{label: label})
+    tag = GibberChat.ApiController.check_insert(conn, tag)
+    json(conn, tag_response(tag))
+  end
+
   def create(conn, %{"auth_token" => auth_token,
                      "label" => label
                      }) do
@@ -57,6 +72,10 @@ defmodule GibberChat.TagController do
     else
       GibberChat.ApiController.not_found(conn)
     end
+  end
+
+  def tags_response(tags) do
+    Enum.map(tags, fn elem -> tag_response(elem) end)
   end
 
   def find_room(conn, id) do

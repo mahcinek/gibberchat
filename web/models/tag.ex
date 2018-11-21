@@ -23,4 +23,18 @@ defmodule GibberChat.Tag do
     query = from r in GibberChat.Tag, where: r.id == ^id
     GibberChat.Repo.one(query)
   end
+
+  def all_tags() do
+    query = from r in GibberChat.Tag
+    GibberChat.Repo.all(query)
+  end
+
+  def find_tag_label_users(label) do
+    query = from r in GibberChat.Tag, where: r.label == ^label, preload: [:users]
+    GibberChat.Repo.one(query)
+  end
+  def find_tag_label_rooms(label) do
+    query = from r in GibberChat.Tag, where: r.label == ^label, preload: [:rooms]
+    GibberChat.Repo.one(query)
+  end
 end

@@ -25,6 +25,7 @@ defmodule GibberChat.Router do
     post "/user", UserController, :create
     delete "/user", UserController, :delete
     get "/user", UserController, :show
+    get "/search", UserController, :search
     post "/blockage", BlockageController, :create
     delete "/blockage", BlockageController, :delete
     get "/tags", TagController, :index
