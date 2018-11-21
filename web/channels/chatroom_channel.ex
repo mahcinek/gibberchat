@@ -1,11 +1,11 @@
-defmodule GibberChat.RoomChannel do
+defmodule GibberChat.ChatroomChannel do
   use GibberChat.Web, :channel
 
   alias GibberChat.Presence
 
-  def join("room:lobby", _params, socket) do
+  def join("chatroom:" <> room_access_token, _params, socket) do
     send self(), :after_join
-    {:ok, socket}
+    find_room(room_access_token, socket)
   end
   
   def join(_other, _params, socket) do
@@ -27,5 +27,14 @@ defmodule GibberChat.RoomChannel do
       timestamp: :os.system_time(:milli_seconds)
     }
     {:noreply, socket}
+  end
+
+  def find_room(token, socket) do
+    r = GibberChat.Room.find_room(token)
+    if r == nil do
+      {:error, "Room does not exist."}
+    else
+      {:ok, socket}
+    end
   end
 end

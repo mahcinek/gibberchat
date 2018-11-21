@@ -48,7 +48,9 @@ defmodule GibberChat.User do
       %{status: "none", res: res}
     end
   end
-  def auth_user(user_token) do
+  def find_user(user_token) do
+    query = from r in GibberChat.User, where: r.access_token == ^user_token
+    GibberChat.Repo.one(query)
   end
 
   def find_user_with_tokens(id) do

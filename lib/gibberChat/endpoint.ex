@@ -2,6 +2,7 @@ defmodule GibberChat.Endpoint do
   use Phoenix.Endpoint, otp_app: :gibberChat
 
   socket "/socket", GibberChat.UserSocket
+  socket "/chat", GibberChat.ChatSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
