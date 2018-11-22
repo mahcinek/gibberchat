@@ -6,7 +6,7 @@ defmodule GibberChat.MessageController do
 
   def room_messages(conn, %{"room_token" => r_token,
                             "user_token" => u_token})do
-    room = find_room(conn, r_token)
+    room = find_room_with_messages_ordered(conn, r_token)
     user = find_user(conn, u_token)
     json(conn, messages_response(room.messages))
   end
@@ -51,5 +51,24 @@ defmodule GibberChat.MessageController do
       GibberChat.ApiController.not_found(conn)
     end
   end
+  def find_messages_ordered(conn, room_id) do
+    room = GibberChat.Message.find_message_id(id)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+  def find_room(conn, token) do
+    room = GibberChat.Room.find_room(token)
+    unless room == nil do 
+      room
+    else
+      GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+
 
 end
