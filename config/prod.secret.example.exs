@@ -9,7 +9,7 @@ use Mix.Config
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or yourself later on).
 config :gibberChat, GibberChat.Endpoint,
-  secret_key_base: "u/BOzKsCYsNe4XryJF4pVwEe0XSJ0StGgGLtcbLN4CrpBTs2WrnmnvS4YnO0yOVq"
+  secret_key_base: "A LONG SECRET"
 
 # Configure your database
 config :gibberChat, GibberChat.Repo,
