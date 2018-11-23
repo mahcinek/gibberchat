@@ -6,15 +6,21 @@ defmodule GibberChat.MessageController do
 
   def room_messages(conn, %{"room_token" => r_token,
                             "user_token" => u_token})do
-    room = find_room_with_messages_ordered(conn, r_token)
     user = find_user(conn, u_token)
+    room = find_room_with_messages_ordered(conn, r_token)
+    unless room.open do
+      GibberChat.ApiController.unauthorized(conn)
+    end
     json(conn, messages_response(room.messages))
   end
 
   def room_messages(conn, %{"room_token" => r_token,
                             "user_token" => u_token,
                             "auth_token" => u_auth_token})do
-    
+    user = find_user(conn, u_token)
+    room = find_room_with_messages_ordered(conn, r_token)
+    auth_user(conn, room.id, u_auth_token)
+    json(conn, messages_response(room.messages))
   end
   
   def update(conn, %{"auth_token" => auth_token,
