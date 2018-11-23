@@ -20,11 +20,9 @@ defmodule GibberChat.RoomUser do
 
   def auth_user(room_id, user_token) do
     query = from ru in GibberChat.RoomUser, where: ru.room_id == ^room_id and ru.auth_token == ^user_token
-    res = GibberChat.Repo.all(query)
-    s = "none"
-    IO.puts "is empty"
-    IO.inspect Enum.empty?(res)
-    unless Enum.empty?(res) do 
+    res = GibberChat.Repo.one(query)
+    res = res.user
+    unless res == nil do 
       IO.puts "OK"
       %{status: "ok", res: res}
     else

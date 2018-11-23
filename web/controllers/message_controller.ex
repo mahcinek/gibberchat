@@ -3,6 +3,14 @@ defmodule GibberChat.MessageController do
   def auth_adm(conn,token) do
     GibberChat.User.auth_adm_helper(conn,token)
   end
+  def auth_user(conn,room_id,token) do
+    {status, res} = GibberChat.RoomUser.auth_user(room_id,token)
+    if status == "ok"
+      res
+    else
+      GibberChat.ApiController.unauthorized(conn)
+    end
+  end
 
   def room_messages(conn, %{"room_token" => r_token,
                             "user_token" => u_token})do
