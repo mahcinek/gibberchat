@@ -13,6 +13,7 @@ defmodule GibberChat do
       # Start the endpoint when the application starts
       supervisor(GibberChat.Endpoint, []),
       supervisor(GibberChat.Presence, []),
+      supervisor(Task.Supervisor, [[name: GibberChat.TaskSupervisor]]),
       # Start your own worker by calling: GibberChat.Worker.start_link(arg1, arg2, arg3)
       # worker(GibberChat.Worker, [arg1, arg2, arg3]),
     ]

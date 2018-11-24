@@ -5,6 +5,10 @@
     |> put_status(:not_found)
     |> json(%{status: "not found"})
   end
+
+  def call_asynch_pls(func) do
+    Task.Supervisor.async_nolink(GibberChat.TaskSupervisor,func)
+  end
   def check_insert(conn, insert) do
     {a,b} = insert
     if a == :ok do

@@ -54,7 +54,9 @@ defmodule GibberChat.MessageController do
   def message_response(message) do
       %{id: message.id,
         body: message.body,
-        options: message.options
+        options: message.options,
+        nick: message.user.nick,
+        inserted_at: message.inserted_at
       }
   end
 

@@ -19,6 +19,11 @@ defmodule GibberChat.Message do
     |> validate_required([:body])
   end
 
+  def save_message(body, opts, user_id, room_id) do
+    m = GibberChat.Repo.insert(%GibberChat.Message{body: body, options: opts, user_id: user_id, room_id: room_id})
+    IO.puts "Inserted #{elem(m,1).id}"
+  end
+
   def find_message_id(id) do
     query = from r in GibberChat.Message, where: r.id == ^id
     GibberChat.Repo.one(query)

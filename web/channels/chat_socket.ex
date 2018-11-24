@@ -20,6 +20,7 @@ defmodule GibberChat.ChatSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   def connect(%{"access_token" => token}, socket) do
+    IO.puts "connecting token #{token}"
     check_token(socket,token)
   end
 
@@ -42,9 +43,13 @@ defmodule GibberChat.ChatSocket do
 
   def check_token(socket,token) do
     us = GibberChat.User.find_user(token)
+
     if us == nil do
       :error
     else
+      socket = assign(socket,:nick, us.nick)
+      IO.puts "Asigning #{us.nick}"
+      socket = assign(socket,:us_id, us.id)
       {:ok, assign(socket, :user_token, token)}
     end
   end
