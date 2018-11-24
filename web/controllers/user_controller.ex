@@ -25,7 +25,7 @@ defmodule GibberChat.UserController do
 
   def find_user(conn, id) do
     user = GibberChat.User.find_user_id(id)
-    unless user == nil do 
+    unless user == nil do
       user
     else
       GibberChat.ApiController.not_found(conn)
@@ -33,7 +33,7 @@ defmodule GibberChat.UserController do
   end
   def find_user_all(conn, id) do
     user = GibberChat.User.find_user_with_tokens(id)
-    unless user == nil do 
+    unless user == nil do
       user
     else
       GibberChat.ApiController.not_found(conn)
@@ -42,7 +42,7 @@ defmodule GibberChat.UserController do
 
   def find_user_all_token(conn, token) do
     user = GibberChat.User.find_user_with_token_tokens(token)
-    unless user == nil do 
+    unless user == nil do
       user
     else
       GibberChat.ApiController.not_found(conn)
@@ -51,7 +51,7 @@ defmodule GibberChat.UserController do
 
   def find_users_all_tag(conn, tag) do
     tag = GibberChat.Tag.find_tag_label_users(tag)
-    unless tag == nil do 
+    unless tag == nil do
       tag
     else
       GibberChat.ApiController.not_found_message(conn, "tag")
@@ -115,7 +115,8 @@ defmodule GibberChat.UserController do
     %{auth_token: room_user.auth_token,
       room_id: room_user.room.id,
       room_access_token: room_user.room.access_token,
-      room_open: room_user.room.open
+      room_open: room_user.room.open,
+      room_title: room_user.room.title
     }
   end
 

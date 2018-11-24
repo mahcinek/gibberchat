@@ -5,6 +5,7 @@ defmodule GibberChat.Message do
     field :body, :string
     field :options, :string
     belongs_to :room, GibberChat.Room, foreign_key: :room_id
+    belongs_to :user, GibberChat.User, foreign_key: :user_id
 
     timestamps()
   end

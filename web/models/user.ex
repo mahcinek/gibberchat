@@ -10,6 +10,7 @@ defmodule GibberChat.User do
     has_many :tags, through: [:user_tags, :tag]
     has_many :room_users, GibberChat.RoomUser
     has_many :rooms, through: [:room_users, :room]
+    has_many :messages, GibberChat.Message
     timestamps()
   end
 
@@ -41,7 +42,7 @@ defmodule GibberChat.User do
     s = "none"
     IO.puts "is empty"
     IO.inspect Enum.empty?(res)
-    unless Enum.empty?(res) do 
+    unless Enum.empty?(res) do
       IO.puts "OK"
       %{status: "ok", res: res}
     else

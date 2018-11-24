@@ -36,6 +36,11 @@ defmodule GibberChat.Room do
     query = from r in GibberChat.Room, where: r.access_token == ^token
     GibberChat.Repo.one(query)
   end
+  def find_room_with_messages_ordered(token) do
+    messagess_query = from c in GibberChat.Message, order_by: [desc: :inserted_at], preload: [:user]
+    query = from r in GibberChat.Room, where: r.access_token == ^token, preload: [messages: ^messagess_query]
+    GibberChat.Repo.one(query)
+  end
   def find_room_id(id) do
     query = from r in GibberChat.Room, where: r.id == ^id
     GibberChat.Repo.one(query)

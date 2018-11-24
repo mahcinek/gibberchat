@@ -11,6 +11,7 @@ defmodule GibberChat.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "*"
   end
 
   scope "/", GibberChat do
@@ -18,7 +19,7 @@ defmodule GibberChat.Router do
 
     get "/", PageController, :index
   end
-  
+
   # Other scopes may use custom stacks.
   scope "/api", GibberChat do
     pipe_through :api
@@ -35,6 +36,7 @@ defmodule GibberChat.Router do
     post "/add_to_room", TagController, :add_to_room
     delete "/tag", TagController, :delete
     get "/messages", MessageController, :index
+    get "/room_messages", MessageController, :room_messages
     put "/message", MessageController, :update
     delete "/message", MessageController, :delete
     get "/rooms", RoomController, :index

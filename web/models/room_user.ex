@@ -22,7 +22,7 @@ defmodule GibberChat.RoomUser do
     query = from ru in GibberChat.RoomUser, where: ru.room_id == ^room_id and ru.auth_token == ^user_token
     res = GibberChat.Repo.one(query)
     res = res.user
-    unless res == nil do 
+    unless res == nil or res.room.open do
       IO.puts "OK"
       %{status: "ok", res: res}
     else
