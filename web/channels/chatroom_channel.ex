@@ -46,22 +46,19 @@ defmodule GibberChat.ChatroomChannel do
       options: opts,
       timestamp: :os.system_time(:milli_seconds)
     }
-    %{"room_info" => a} = Presence.list(socket)
-    d = List.first(elem(Map.fetch(a, :metas),1))
-    %{id: r_id, phx_ref: sth, save_on: save_on} = d
-    if save_on do
-      GibberChat.ApiController.call_asynch_pls(fn ->
-        mes(body, opts, socket.assigns.us_id, socket, r_id)
-      end)
-    end
+    GibberChat.ApiController.call_asynch_pls(fn ->
+      mes(body, opts, socket.assigns.us_id, socket)
+    end)
     {:noreply, socket}
   end
 
-  def mes(body, opts, us_id, socket, room_id) do
-    # %{"room_id" => a, "save_on" => b} = Presence.list(socket)
-    a= room_id
-    r_id = room_id
-    GibberChat.Message.save_message(body, opts, socket.assigns.us_id,r_id)
+  def mes(body, opts, us_id, socket) do
+   %{"room_info" => a} = Presence.list(socket)
+    d = List.first(elem(Map.fetch(a, :metas),1))
+    %{id: r_id, phx_ref: sth, save_on: save_on} = d
+    if save_on do
+      GibberChat.Message.save_message(body, opts, socket.assigns.us_id,r_id)
+    end
   end
 
   def check_room(r, socket) do
