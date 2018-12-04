@@ -13,11 +13,10 @@ defmodule GibberChat.ChatroomChannel do
     {:error, "Room does not exist."}
   end
 
-  def track_id(socket, room_id) do
+  def track_id_and_save(socket, room_id, save_on) do
     dd = Presence.list(socket)
-    IO.inspect dd
     if dd['room_id'] == nil do
-      Presence.track(socket, "room_id", %{id: room_id})
+      Presence.track(socket, "room_info", %{id: room_id, save_on: save_on})
     end
   end
 
@@ -32,32 +31,36 @@ defmodule GibberChat.ChatroomChannel do
   def handle_info(:after_join, socket, message) do
     {:noreply, socket}
   end
-  def handle_info(_params, a) do
-    {:noreply, a}
-  end
   def handle_info(a, :ok) do
     {:noreply, a}
   end
+  def handle_info(_params, a) do
+    {:noreply, a}
+  end
+
 
   def handle_in("message:new", %{"body" => body, "options" => opts}, socket) do
-    IO.inspect Presence.list(socket)
     broadcast! socket, "message:new", %{
       nick: socket.assigns.nick,
       body: body,
       options: opts,
       timestamp: :os.system_time(:milli_seconds)
     }
-    GibberChat.ApiController.call_asynch_pls(fn ->
-      mes(body, opts, socket.assigns.us_id, socket)
-    end)
+    %{"room_info" => a} = Presence.list(socket)
+    d = List.first(elem(Map.fetch(a, :metas),1))
+    %{id: r_id, phx_ref: sth, save_on: save_on} = d
+    if save_on do
+      GibberChat.ApiController.call_asynch_pls(fn ->
+        mes(body, opts, socket.assigns.us_id, socket, r_id)
+      end)
+    end
     {:noreply, socket}
   end
 
-  def mes(body, opts, us_id, socket) do
-    %{"room_id" => a} = Presence.list(socket)
-    IO.puts "ssda"
-    IO.inspect(a)
-    r_id = elem(Map.fetch(List.first(elem(Map.fetch(a, :metas),1)), :id),1)
+  def mes(body, opts, us_id, socket, room_id) do
+    # %{"room_id" => a, "save_on" => b} = Presence.list(socket)
+    a= room_id
+    r_id = room_id
     GibberChat.Message.save_message(body, opts, socket.assigns.us_id,r_id)
   end
 
@@ -65,7 +68,7 @@ defmodule GibberChat.ChatroomChannel do
     if r == nil do
       {:error, "Room does not exist."}
     else
-      track_id(socket,r.id)
+      track_id_and_save(socket,r.id, r.save_on)
       {:ok, socket}
     end
   end
