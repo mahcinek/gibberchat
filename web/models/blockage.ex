@@ -21,4 +21,9 @@ defmodule GibberChat.Blockage do
     query = from r in GibberChat.Blockage, where: r.id == ^id
     GibberChat.Repo.one(query)
   end
+  def find_u_r(user_id, room_id) do
+    query = from r in GibberChat.Blockage, where: r.user_id == ^user_id and r.room_id == ^room_id
+    GibberChat.Repo.one(query)
+  end
+
 end

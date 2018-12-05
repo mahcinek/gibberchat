@@ -135,6 +135,7 @@ defmodule GibberChat.RoomController do
     adm = auth_adm(conn, auth_token)
     room = find_room_token(conn, acc_token)
     us_id = elem(Ecto.Type.cast(:integer,us_id),1)
+    find_blockage(conn, us_id, room.id)
     r_u = if room.auth_on do
       r_u = GibberChat.Repo.insert(%GibberChat.RoomUser{user_id: us_id, room_id: room.id, auth_token: gen_access_token()})
        GibberChat.ApiController.check_insert(conn, r_u)
@@ -225,6 +226,15 @@ defmodule GibberChat.RoomController do
       room
     else
       GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+  def find_blockage(conn, user_id, room_id) do
+    room = GibberChat.Blockage.find_u_r(user_id, room_id)
+    unless room == nil do
+      GibberChat.ApiController.forbidden(conn)
+    else
+      nil
     end
   end
 
