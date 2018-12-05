@@ -5,7 +5,7 @@ defmodule GibberChat.Tag do
     field :label, :string
     has_many :room_tags, GibberChat.RoomTag
     has_many :rooms, through: [:room_tags, :room]
-    has_many :room_users, GibberChat.RoomUser
+    has_many :room_users, GibberChat.UserTag
     has_many :users, through: [:room_users, :user]
     timestamps()
   end
@@ -34,7 +34,7 @@ defmodule GibberChat.Tag do
     GibberChat.Repo.one(query)
   end
   def find_tag_label_rooms(label) do
-    query = from r in GibberChat.Tag, where: r.label == ^label, preload: [:rooms]
+    query = from r in GibberChat.Tag, where: r.label == ^label, preload: [:rooms], preload: [rooms: :tags]
     GibberChat.Repo.one(query)
   end
 end

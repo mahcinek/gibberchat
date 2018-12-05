@@ -5,20 +5,18 @@ defmodule GibberChat.RoomController do
   def index(conn, %{"auth_token" => auth_token}) do
     adm = auth_adm(conn,auth_token)
     a = GibberChat.Room.all_rooms()
-    IO.inspect a
-    json(conn, Enum.map(a, fn elem -> room_response(elem) end))
+    json(conn, %{rooms: Enum.map(a, fn elem -> room_response(elem) end)})
   end
 
   def index(conn, _params) do
     a = GibberChat.Room.open_rooms()
-    IO.inspect a
-    json(conn, Enum.map(a, fn elem -> room_public_response(elem) end))
+    json(conn, %{rooms: Enum.map(a, fn elem -> room_public_response(elem) end)})
   end
 
   def show(conn, %{"id" => id}) do
-    
+
   end
-  
+
   def create(conn, %{"auth_token" => auth_token,
                      "save_on" => save_on,
                      "auth_on" => auth_on,
@@ -84,7 +82,7 @@ defmodule GibberChat.RoomController do
     room = GibberChat.ApiController.check_insert(conn, room)
     json(conn, room_response(room))
   end
-  
+
   def update(conn, %{"auth_token" => auth_token,
                      "id" => id,
                      "save_on" => save_on,
@@ -113,7 +111,7 @@ defmodule GibberChat.RoomController do
     r = GibberChat.Repo.update(changeset)
     json(conn, room_response(elem(r,1)))
   end
-    
+
   def delete(conn, %{"auth_token" => auth_token, "id" => id}) do
     adm = auth_adm(conn, auth_token)
     room = find_room(conn, id)
@@ -122,7 +120,17 @@ defmodule GibberChat.RoomController do
     GibberChat.Repo.delete!(room)
     json(conn, %{status: "deleted"})
   end
-  
+
+  def search(conn,%{"auth_token" => auth_token,
+                     "tag" => tag
+                     })do
+    adm = auth_adm(conn, auth_token)
+    tag = find_rooms_all_tag(conn,tag)
+    rooms = tag.rooms
+    IO.inspect rooms
+    json(conn, %{rooms: Enum.map(rooms, fn elem -> room_response(elem) end)})
+  end
+
   def join_room(conn, %{"admin_auth_token" => auth_token, "room_access_token" => acc_token, "user_id" => us_id}) do
     adm = auth_adm(conn, auth_token)
     room = find_room_token(conn, acc_token)
@@ -134,7 +142,7 @@ defmodule GibberChat.RoomController do
       r_u = GibberChat.Repo.insert(%GibberChat.RoomUser{user_id: us_id, room_id: room.id, auth_token: nil})
       r_u = GibberChat.ApiController.check_insert(conn, r_u)
     end
-    conn 
+    conn
     |> GibberChat.ApiController.add_created
     |> json(room_user(r_u))
   end
@@ -190,7 +198,7 @@ defmodule GibberChat.RoomController do
       access_token: room_user.auth_token
       }
   end
-  
+
   def tag_resp(tags) do
     Enum.map(tags, fn elem -> tag_response(elem) end)
   end
@@ -213,7 +221,7 @@ defmodule GibberChat.RoomController do
 
   def find_room(conn, id) do
     room = GibberChat.Room.find_room_id(id)
-    unless room == nil do 
+    unless room == nil do
       room
     else
       GibberChat.ApiController.not_found(conn)
@@ -222,10 +230,19 @@ defmodule GibberChat.RoomController do
 
   def find_room_token(conn, token) do
     room = GibberChat.Room.find_room(token)
-    unless room == nil do 
+    unless room == nil do
       room
     else
       GibberChat.ApiController.not_found(conn)
+    end
+  end
+
+  def find_rooms_all_tag(conn, tag) do
+    tag = GibberChat.Tag.find_tag_label_rooms(tag)
+    unless tag == nil do
+      tag
+    else
+      GibberChat.ApiController.not_found_message(conn, "tag")
     end
   end
 

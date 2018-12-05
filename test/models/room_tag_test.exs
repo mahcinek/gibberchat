@@ -11,8 +11,4 @@ defmodule GibberChat.RoomTagTest do
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
-    changeset = RoomTag.changeset(%RoomTag{}, @invalid_attrs)
-    refute changeset.valid?
-  end
 end

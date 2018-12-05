@@ -3,7 +3,7 @@ defmodule GibberChat.UserTagTest do
 
   alias GibberChat.UserTag
 
-  @valid_attrs %{}
+  @valid_attrs %{user_id: 1, tag_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
@@ -11,8 +11,4 @@ defmodule GibberChat.UserTagTest do
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
-    changeset = UserTag.changeset(%UserTag{}, @invalid_attrs)
-    refute changeset.valid?
-  end
 end

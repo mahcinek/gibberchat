@@ -11,8 +11,4 @@ defmodule GibberChat.BlockageTest do
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
-    changeset = Blockage.changeset(%Blockage{}, @invalid_attrs)
-    refute changeset.valid?
-  end
 end

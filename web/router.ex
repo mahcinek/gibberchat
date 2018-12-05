@@ -26,7 +26,7 @@ defmodule GibberChat.Router do
     post "/user", UserController, :create
     delete "/user", UserController, :delete
     get "/user", UserController, :show
-    get "/search", UserController, :search
+    get "/search_user", UserController, :search
     post "/blockage", BlockageController, :create
     delete "/blockage", BlockageController, :delete
     get "/tags", TagController, :index
@@ -42,7 +42,7 @@ defmodule GibberChat.Router do
     get "/rooms", RoomController, :index
     post "/join_room", RoomController, :join_room
     post "/leave", RoomController, :join_room
-    get "/search", RoomController, :search
+    get "/search_room", RoomController, :search
     post "/room", RoomController, :create
     put "/room", RoomController, :update
     delete "/room", RoomController, :delete

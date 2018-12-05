@@ -83,7 +83,7 @@ defmodule GibberChat.UserController do
     tag = find_users_all_tag(conn,tag)
     users = tag.users
     IO.inspect users
-    json(conn, generate_users_map_private(users))
+    json(conn, %{users: generate_users_map_private(users)})
   end
 
   def user_response(user) do
