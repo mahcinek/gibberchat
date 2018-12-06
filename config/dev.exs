@@ -21,6 +21,7 @@ use Mix.Config
 # different ports.
 config :gibberChat, GibberChat.Endpoint,
   http: [port: 4000],
+  https: [port: 4001, keyfile: "priv/server.key", certfile: "priv/server.pem"],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
